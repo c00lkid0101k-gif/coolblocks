@@ -8,6 +8,37 @@ let score = 0;
 let blocks = [];
 let mouseX = 0;
 let mouseY = 0;
+let explosions = [];
+
+// Explosion class for visual effects
+class Explosion {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 5;
+        this.maxRadius = 25;
+        this.alpha = 1;
+        this.finished = false;
+    }
+
+    update() {
+        this.radius += 2;
+        this.alpha -= 0.05;
+        if (this.alpha <= 0) {
+            this.finished = true;
+        }
+    }
+
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
 
 // Block class
 class Block {
@@ -82,24 +113,11 @@ canvas.addEventListener('click', (e) => {
             scoreDisplay.textContent = 'Score: ' + score;
             
             // Visual feedback
-            createExplosion(x, y);
+            explosions.push(new Explosion(x, y));
             break;
         }
     }
 });
-
-// Create visual explosion effect
-function createExplosion(x, y) {
-    ctx.fillStyle = 'rgba(255, 255, 0, 0.6)';
-    ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.fill();
-}
-
-// Spawn new blocks periodically
-function spawnBlock() {
-    blocks.push(new Block());
-}
 
 // Game loop
 function gameLoop() {
@@ -117,7 +135,23 @@ function gameLoop() {
         }
     }
     
+    // Update and draw explosions
+    for (let i = explosions.length - 1; i >= 0; i--) {
+        explosions[i].update();
+        explosions[i].draw();
+        
+        // Remove finished explosions
+        if (explosions[i].finished) {
+            explosions.splice(i, 1);
+        }
+    }
+    
     requestAnimationFrame(gameLoop);
+}
+
+// Spawn new blocks periodically
+function spawnBlock() {
+    blocks.push(new Block());
 }
 
 // Start game
