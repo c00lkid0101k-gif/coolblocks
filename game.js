@@ -157,7 +157,7 @@ class Game {
         
         const matrix = new THREE.Matrix4();
         const color = new THREE.Color();
-        let index = 0;
+        const blocks = [];
         
         for (const [key, blockType] of this.world) {
             const [x, y, z] = key.split(',').map(Number);
@@ -166,17 +166,20 @@ class Game {
             const exposed = this.isBlockExposed(x, y, z);
             if (!exposed) continue;
             
+            blocks.push({ x, y, z, blockType });
+        }
+        
+        for (let i = 0; i < blocks.length; i++) {
+            const { x, y, z, blockType } = blocks[i];
             matrix.setPosition(x + BLOCK_SIZE / 2, y + BLOCK_SIZE / 2, z + BLOCK_SIZE / 2);
-            instancedMesh.setMatrixAt(index, matrix);
+            instancedMesh.setMatrixAt(i, matrix);
             
             const blockColor = BLOCK_TYPES[blockType]?.color || 0xffffff;
             color.setHex(blockColor);
-            instancedMesh.setColorAt(index, color);
-            
-            index++;
+            instancedMesh.setColorAt(i, color);
         }
         
-        instancedMesh.count = index;
+        instancedMesh.count = blocks.length;
         this.worldMesh = instancedMesh;
         this.scene.add(this.worldMesh);
     }
@@ -289,7 +292,7 @@ class Game {
         const direction = raycaster.ray.direction;
         const origin = raycaster.ray.origin;
         
-        for (let distance = 0; distance < maxDistance; distance += 0.1) {
+        for (let distance = 0; distance < maxDistance; distance += 0.2) {
             const point = origin.clone().add(direction.clone().multiplyScalar(distance));
             const x = Math.floor(point.x);
             const y = Math.floor(point.y);
@@ -297,7 +300,7 @@ class Game {
             
             if (this.getBlock(x, y, z)) {
                 // Found a block, now find the face
-                const prevPoint = origin.clone().add(direction.clone().multiplyScalar(distance - 0.1));
+                const prevPoint = origin.clone().add(direction.clone().multiplyScalar(distance - 0.2));
                 const prevX = Math.floor(prevPoint.x);
                 const prevY = Math.floor(prevPoint.y);
                 const prevZ = Math.floor(prevPoint.z);
@@ -393,12 +396,12 @@ class Game {
         this.player.onGround = false;
         
         // Check vertical collision (feet)
-        const feetY = Math.floor(newPosition.y - PLAYER_HEIGHT);
+        const feetY = Math.floor(newPosition.y);
         const blockBelowX = Math.floor(newPosition.x);
         const blockBelowZ = Math.floor(newPosition.z);
         
         if (this.getBlock(blockBelowX, feetY, blockBelowZ)) {
-            newPosition.y = feetY + PLAYER_HEIGHT + 1;
+            newPosition.y = feetY + 1;
             this.player.velocity.y = 0;
             this.player.onGround = true;
         }

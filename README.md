@@ -24,7 +24,7 @@ A 3D Voxel Game built with Three.js - Create your own blocky worlds like in Mine
 ## Installation & Running
 
 ### Prerequisites
-- Node.js (v16 or higher)
+- Node.js (v18 or higher)
 - npm or yarn
 
 ### Setup
