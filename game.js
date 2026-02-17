@@ -23,7 +23,7 @@ class Explosion {
 
     update() {
         this.radius += 2;
-        this.alpha -= 0.05;
+        this.alpha -= 0.1;
         if (this.alpha <= 0) {
             this.finished = true;
         }
