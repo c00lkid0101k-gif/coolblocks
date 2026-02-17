@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoolBlocks - 3D Voxel Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="crosshair"></div>
+        
+        <div id="ui-overlay">
+            <div id="controls-info">
+                <h3>Controls</h3>
+                <p><strong>WASD</strong> - Move</p>
+                <p><strong>Space</strong> - Jump</p>
+                <p><strong>Mouse</strong> - Look Around</p>
+                <p><strong>Left Click</strong> - Break Block</p>
+                <p><strong>Right Click</strong> - Place Block</p>
+                <p><strong>1-5</strong> - Select Block Type</p>
+                <p><strong>Click to Start</strong></p>
+            </div>
+            
+            <div id="block-toolbar">
+                <div class="block-slot active" data-block="grass">
+                    <div class="block-preview grass-block"></div>
+                    <span>1</span>
+                </div>
+                <div class="block-slot" data-block="dirt">
+                    <div class="block-preview dirt-block"></div>
+                    <span>2</span>
+                </div>
+                <div class="block-slot" data-block="stone">
+                    <div class="block-preview stone-block"></div>
+                    <span>3</span>
+                </div>
+                <div class="block-slot" data-block="wood">
+                    <div class="block-preview wood-block"></div>
+                    <span>4</span>
+                </div>
+                <div class="block-slot" data-block="sand">
+                    <div class="block-preview sand-block"></div>
+                    <span>5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="game.js"></script>
+</body>
+</html>
